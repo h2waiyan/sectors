@@ -80,7 +80,9 @@ const DropdownCheckbox = ({
       <div className="flex justify-between">
         <div
           className={`inline me-2 ${
-            isEditing ? "text-black" : "text-gray-400"
+            isEditing || selectedSectors.length !== 0
+              ? "text-black"
+              : "text-gray-400"
           } overflow-hidden overflow-ellipsis whitespace-nowrap`}
         >
           {isEditing || selectedSectors.length !== 0
