@@ -24,7 +24,7 @@ const App = () => {
         <div className="flex text-center">
           <Loading />
         </div>
-      ) : sectorIsSuccess && entriesIsSuccess ? (
+      ) : (
         <Routes>
           <Route path="/entry-list" element={<EntriesList />} />
           <Route path="">
@@ -33,10 +33,6 @@ const App = () => {
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>
-      ) : (
-        <div className="flex text-center">
-          <h1>Loading . . .</h1>
-        </div>
       )}
     </BrowserRouter>
   );
