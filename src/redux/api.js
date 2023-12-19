@@ -1,16 +1,36 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { getUsers } from "./entry_slice";
+import { getSectors } from "./sector_slice";
 
 export const api = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://jsonplaceholder.typicode.com/",
+    baseUrl: "https://devdiaries-h92o.onrender.com/api/entry/",
   }),
   endpoints: (builder) => ({
+    getSectors: builder.query({
+      query: () => ({
+        url: "sectors",
+        method: "POST",
+      }),
+      async onQueryStarted(arg, { queryFulfilled, dispatch }) {
+        try {
+          const result = await queryFulfilled;
+
+          dispatch(
+            getSectors({
+              sectors: result.data.data,
+            })
+          );
+        } catch (error) {
+          console.error(error);
+        }
+      },
+    }),
     getEntries: builder.query({
       query: () => ({
-        url: "users",
-        method: "GET",
+        url: "get",
+        method: "POST",
       }),
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
@@ -18,7 +38,7 @@ export const api = createApi({
           console.log(result);
           dispatch(
             getUsers({
-              data: result.data,
+              entries: result.data.finalList,
             })
           );
         } catch (error) {
@@ -28,14 +48,14 @@ export const api = createApi({
     }),
     addEntry: builder.mutation({
       query: (body) => ({
-        url: "todos",
+        url: "add",
         method: "POST",
         body,
       }),
     }),
     editEntry: builder.mutation({
-      query: ({ id, body }) => ({
-        url: `todos/${id}`,
+      query: (body) => ({
+        url: "update",
         method: "POST",
         body,
       }),
@@ -43,5 +63,9 @@ export const api = createApi({
   }),
 });
 
-export const { useGetEntriesQuery, useAddEntryMutation, useEditEntryMutation } =
-  api;
+export const {
+  useGetSectorsQuery,
+  useGetEntriesQuery,
+  useAddEntryMutation,
+  useEditEntryMutation,
+} = api;

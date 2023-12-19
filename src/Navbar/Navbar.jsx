@@ -8,10 +8,10 @@ const Navbar = () => {
       </h2>
 
       <div className="flex space-x-4">
-        <NavLink to="/entry" className="text-white text-sm md:text-lg">
+        <NavLink to="/" className="text-white text-sm md:text-lg">
           Add Entry
         </NavLink>
-        <NavLink to="/" className="text-white text-sm md:text-lg" exact>
+        <NavLink to="/entry-list" className="text-white text-sm md:text-lg">
           Entries List
         </NavLink>
       </div>

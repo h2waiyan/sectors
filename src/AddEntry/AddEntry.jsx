@@ -3,64 +3,117 @@ import { string, array, boolean, object } from "yup";
 import { useEffect, useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import Sectors from "../Sectors/Sectors";
-import { useAddEntryMutation } from "../redux/api";
-
+import { useAddEntryMutation, useEditEntryMutation } from "../redux/api";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import toast from "react-hot-toast";
 
 let userSchema = object({
   name: string().required("Name cannot be blank."),
   sectors: array().min(1, "At least one sector is required."),
-  agree: boolean().oneOf([true], "Please agree to the terms to continue."),
+  agreetoterms: boolean().oneOf(
+    [true],
+    "Please agree to the terms to continue."
+  ),
 });
 
-const AddData = () => {
+const AddData = ({ refetch }) => {
+  const navigate = useNavigate();
   // handle edit data
   const { state } = useLocation();
   const { entryid } = useParams();
   const [isEditing, setIsEditing] = useState(false);
 
   const [selectedSectors, setSelectedSectors] = useState([]);
-  const [data, setData] = useState({
+  const [entry, setEntry] = useState({
     id: "",
     name: "",
     sectors: [],
-    agree: true,
+    agreetoterms: false,
   });
 
-  const { data: usrData } = useSelector((state) => state.entries);
+  // const { data } = useSelector((state) => state.entries);
+  // console.log("------>>>>");
+  // console.log(data);
+  // const entries = data.entries;
 
-  const [addEntry, { data: newData, isLoading, error }] = useAddEntryMutation();
+  const [
+    addEntry,
+    {
+      data: newData,
+      isLoading: addEntryLoading,
+      isSuccess: addEntrySuccess,
+      error: addEntryError,
+    },
+  ] = useAddEntryMutation();
+
+  const [
+    editEntry,
+    {
+      data: updatedData,
+      isLoading: editEntryLoading,
+      isSuccess: editEntrySuccess,
+      error: editEntryError,
+    },
+  ] = useEditEntryMutation();
 
   useEffect(() => {
     if (entryid) {
       setIsEditing(true);
-      setData(state);
+      setEntry(state);
+      console.log("STATE");
+      console.log(state);
       setSelectedSectors(state.sectors);
     } else {
       setIsEditing(false);
       setSelectedSectors([]);
-      setData({
+      setEntry({
         id: "",
         name: "",
         sectors: [],
-        agree: true,
+        agreetoterms: false,
       });
     }
   }, [entryid]);
 
+  useEffect(() => {
+    if (addEntryError) {
+      toast.error("Error adding entry");
+    }
+
+    if (addEntrySuccess) {
+      toast.success("Entry added successfully");
+      refetch();
+      navigate(`/${newData.data[0].entryid}`, {
+        state: {
+          ...entry,
+          entryid: newData.data[0].entryid,
+        },
+      });
+    }
+  }, [addEntryError, addEntrySuccess]);
+
+  useEffect(() => {
+    if (editEntryError) {
+      toast.error("Error editing entry");
+    }
+    if (editEntrySuccess) {
+      toast.success("Entry edited successfully");
+      refetch();
+    }
+  }, [editEntryError, editEntrySuccess]);
+
   return (
     <div className="flex justify-center items-center h-45">
       <Formik
-        initialValues={data}
+        initialValues={entry}
         validationSchema={userSchema}
         enableReinitialize={true}
         onSubmit={async (values) => {
-          toast.success("Successfully added entry!", {
-            duration: 2000,
-          });
-          // await addEntry(values);
-          // alert(JSON.stringify(values, null, 2));
+          setEntry(values);
+          alert(JSON.stringify(values, null, 2));
+          if (isEditing) await editEntry(values);
+          if (!isEditing) await addEntry(values);
         }}
       >
         {({ errors, touched }) => (
@@ -128,8 +181,8 @@ const AddData = () => {
               <div className="mb-4">
                 <Field
                   type="checkbox"
-                  id="agree"
-                  name="agree"
+                  id="agreetoterms"
+                  name="agreetoterms"
                   className={`mt-2 me-2 inline-block ${
                     errors.agree && touched.agree
                       ? "border-red-500 border-2"
@@ -137,7 +190,7 @@ const AddData = () => {
                   }`}
                 />
                 <label
-                  htmlFor="agree"
+                  htmlFor="agreetoterms"
                   className="inline me-5 mt-5 text-gray-800 font-bold"
                 >
                   Agree to terms
@@ -145,16 +198,17 @@ const AddData = () => {
                 <br></br>
                 <ErrorMessage
                   component="div"
-                  name="agree"
+                  name="agreetoterms"
                   className="text-red-500"
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full p-2 bg-blue-600 text-white font-semibold rounded-lg"
+                disabled={addEntryLoading}
+                className="w-full p-2 bg-blue-600 text-white font-semibold rounded-lg disabled:opacity-80"
               >
-                {isEditing ? "Update" : "Submit"}
+                {addEntryLoading ? "Loading..." : "Save"}
               </button>
             </Form>
           </div>

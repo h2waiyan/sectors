@@ -1,98 +1,23 @@
 import { useState, useEffect, useRef } from "react";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import "./Sectors.css";
+import { useSelector } from "react-redux";
 
 const DropdownCheckbox = ({
   errors,
   touched,
   isEditing,
   arrayHelpers,
+
   selectedSectors,
   setSelectedSectors,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [sectors, setSectors] = useState([
-    {
-      label: "Manufacturing",
-      value: 1,
-      children: [
-        {
-          label: "Construction materials",
-          value: 19,
-        },
-        {
-          label: "Electronics and Optics",
-          value: 18,
-        },
-        {
-          label: "Food and Beverage",
-          value: 6,
-          children: [
-            {
-              label: "Bakery & confectionery products",
-              value: 342,
-            },
-            {
-              label: "Beverages",
-              value: 43,
-            },
-            {
-              label: "Fish and Fish products",
-              value: 42,
-            },
-            {
-              label: "Meat and Meat products",
-              value: 40,
-            },
-            {
-              label: "Milk and dairy products",
-              value: 39,
-            },
-            {
-              label: "Other",
-              value: 437,
-            },
-          ],
-        },
-        {
-          label: "Furniture",
-          value: 5,
-          children: [
-            {
-              label: "Bathroom",
-              value: 16,
-            },
-            {
-              label: "Bedroom",
-              value: 17,
-            },
-          ],
-        },
-        {
-          label: "Machinery",
-          value: 12,
-          children: [
-            {
-              label: "Maritime",
-              value: 690,
-              children: [
-                {
-                  label: "Aluminium and steel workboats",
-                  value: 271,
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-    {
-      label: "Construction",
-      value: 10,
-    },
-  ]);
+  const { data } = useSelector((state) => state.sectors);
+  const sectors = data.sectors;
 
   const dropdownRef = useRef(null);
+
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -118,9 +43,32 @@ const DropdownCheckbox = ({
     );
   };
 
+  console.log(selectedSectors);
+
   useEffect(() => {
     arrayHelpers.form.setFieldValue("sectors", selectedSectors);
   }, [selectedSectors]);
+
+  const getName = (sectorArray, sectorId) => {
+    for (let sector of sectorArray) {
+      if (sector.sectorid == sectorId) {
+        return sector.name;
+      }
+      if (sector.children) {
+        const childName = getName(sector.children, sectorId);
+        if (childName) return childName;
+      }
+    }
+  };
+
+  const getSectorName = (sectorId) => {
+    let currentSectors = sectors;
+    while (currentSectors) {
+      const name = getName(currentSectors, sectorId);
+      if (name) return name;
+      currentSectors = currentSectors.children;
+    }
+  };
 
   return (
     <div
@@ -138,15 +86,8 @@ const DropdownCheckbox = ({
             isEditing ? "text-black" : "text-gray-400"
           } overflow-hidden overflow-ellipsis whitespace-nowrap`}
         >
-          {isEditing
-            ? selectedSectors
-                .map((sectorId) => {
-                  const sector = sectors.find((s) => {
-                    return s.value === sectorId;
-                  });
-                  return sector ? sector.label : "";
-                })
-                .join(", ")
+          {isEditing || selectedSectors.length !== 0
+            ? selectedSectors.map((sector) => getSectorName(sector)).join(", ")
             : "Current Sectors"}
         </div>
         <div className="inline me-2">
@@ -163,67 +104,67 @@ const DropdownCheckbox = ({
           onClick={(e) => e.stopPropagation()}
         >
           {sectors.map((sector) => (
-            <div key={sector.value}>
+            <div key={sector.sectorid}>
               <label className="block text-black">
                 <input
                   type="checkbox"
-                  id={sector.value}
-                  checked={selectedSectors.includes(sector.value)}
-                  onChange={() => handleSectorChange(sector.value)}
+                  id={sector.sectorid}
+                  checked={selectedSectors.includes(sector.sectorid)}
+                  onChange={() => handleSectorChange(sector.sectorid)}
                   className="mx-2 h-3 w-3 rounded shadow-inner"
                 />
-                {sector.label}
+                {sector.name}
               </label>
               {sector.children &&
                 sector.children.map((child) => (
-                  <div key={child.value} className="ml-4 c">
+                  <div key={child.sectorid} className="ml-4 c">
                     <label className="block text-black">
                       <input
                         type="checkbox"
-                        id={child.value}
-                        checked={selectedSectors.includes(child.value)}
-                        onChange={() => handleSectorChange(child.value)}
+                        id={child.sectorid}
+                        checked={selectedSectors.includes(child.sectorid)}
+                        onChange={() => handleSectorChange(child.sectorid)}
                         className="mx-2 h-3 w-3 rounded shadow-inner"
                       />
-                      {child.label}
+                      {child.name}
                     </label>
                     {child.children &&
                       child.children.map((grandChild) => (
-                        <div key={grandChild.value} className="ml-4 gc">
+                        <div key={grandChild.sectorid} className="ml-4 gc">
                           <label className="block text-black">
                             <input
                               type="checkbox"
-                              id={grandChild.value}
+                              id={grandChild.sectorid}
                               checked={selectedSectors.includes(
-                                grandChild.value
+                                grandChild.sectorid
                               )}
                               onChange={() =>
-                                handleSectorChange(grandChild.value)
+                                handleSectorChange(grandChild.sectorid)
                               }
                               className="mx-2 h-3 w-3 rounded shadow-inner"
                             />
-                            {grandChild.label}
+                            {grandChild.name}
                             {grandChild.children &&
                               grandChild.children.map((greatGrandChild) => (
                                 <div
-                                  key={greatGrandChild.value}
+                                  key={greatGrandChild.sectorid}
                                   className="ml-4 ggc"
                                 >
                                   <label className="block text-black">
                                     <input
                                       type="checkbox"
-                                      id={greatGrandChild.value}
+                                      id={greatGrandChild.sectorid}
                                       checked={selectedSectors.includes(
-                                        greatGrandChild.value
+                                        greatGrandChild.sectorid
                                       )}
                                       onChange={() =>
                                         handleSectorChange(
-                                          greatGrandChild.value
+                                          greatGrandChild.sectorid
                                         )
                                       }
                                       className="mx-2 h-3 w-3 rounded shadow-inner"
                                     />
-                                    {greatGrandChild.label}
+                                    {greatGrandChild.name}
                                   </label>
                                 </div>
                               ))}
