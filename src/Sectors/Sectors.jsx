@@ -73,7 +73,7 @@ const DropdownCheckbox = ({
       name="sectors"
       onClick={toggleDropdown}
       ref={dropdownRef}
-      className={`relative inline-block mt-2 p-2 w-full rounded shadow-inner ${
+      className={`relative inline-block mt-2 p-2 w-72 sm:w-full rounded shadow-inner ${
         errors.sectors && touched.sectors ? "border-red-500 border-2" : "border"
       }`}
     >
