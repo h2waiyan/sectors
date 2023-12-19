@@ -1,11 +1,10 @@
 import { Formik, Field, Form, FieldArray, ErrorMessage } from "formik";
 import { string, array, boolean, object } from "yup";
 import { useEffect, useState } from "react";
-import { useParams, useLocation } from "react-router-dom";
-import Sectors from "../Sectors/Sectors";
+import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { useAddEntryMutation, useEditEntryMutation } from "../redux/api";
-import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import Loading from "../Loading/Loading";
+import Sectors from "../Sectors/Sectors";
 import toast from "react-hot-toast";
 
 let userSchema = object({
@@ -205,10 +204,10 @@ const AddData = ({ refetch }) => {
 
               <button
                 type="submit"
-                disabled={addEntryLoading}
-                className="w-full p-2 bg-blue-600 text-white font-semibold rounded-lg disabled:opacity-80"
+                disabled={addEntryLoading || editEntryLoading}
+                className="w-full h-10 p-2 bg-blue-600 text-white font-semibold rounded-lg disabled:opacity-80 flex items-center justify-center"
               >
-                {addEntryLoading ? "Loading..." : "Save"}
+                {addEntryLoading || editEntryLoading ? <Loading /> : "Save"}
               </button>
             </Form>
           </div>

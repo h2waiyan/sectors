@@ -8,7 +8,6 @@ const DropdownCheckbox = ({
   touched,
   isEditing,
   arrayHelpers,
-
   selectedSectors,
   setSelectedSectors,
 }) => {
@@ -43,8 +42,6 @@ const DropdownCheckbox = ({
     );
   };
 
-  console.log(selectedSectors);
-
   useEffect(() => {
     arrayHelpers.form.setFieldValue("sectors", selectedSectors);
   }, [selectedSectors]);
@@ -76,11 +73,11 @@ const DropdownCheckbox = ({
       name="sectors"
       onClick={toggleDropdown}
       ref={dropdownRef}
-      className={`relative inline-block mt-2 mb-2 p-2 w-full rounded shadow-inner ${
+      className={`relative inline-block mt-2 p-2 w-full rounded shadow-inner ${
         errors.sectors && touched.sectors ? "border-red-500 border-2" : "border"
       }`}
     >
-      <div className="flex justify-between ">
+      <div className="flex justify-between">
         <div
           className={`inline me-2 ${
             isEditing ? "text-black" : "text-gray-400"
