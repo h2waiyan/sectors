@@ -110,7 +110,6 @@ const AddData = ({ refetch }) => {
         enableReinitialize={true}
         onSubmit={async (values) => {
           setEntry(values);
-          alert(JSON.stringify(values, null, 2));
           if (isEditing) await editEntry(values);
           if (!isEditing) await addEntry(values);
         }}

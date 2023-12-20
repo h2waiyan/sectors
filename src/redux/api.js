@@ -5,13 +5,13 @@ import { getSectors } from "./sector_slice";
 export const api = createApi({
   reducerPath: "api",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://devdiaries-h92o.onrender.com/api/entry/",
+    baseUrl: "https://sectors.htoowaiyan.me/api/v1/",
   }),
   endpoints: (builder) => ({
     getSectors: builder.query({
       query: () => ({
-        url: "sectors",
-        method: "POST",
+        url: "sector",
+        method: "GET",
       }),
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
@@ -29,8 +29,8 @@ export const api = createApi({
     }),
     getEntries: builder.query({
       query: () => ({
-        url: "get",
-        method: "POST",
+        url: "entry",
+        method: "GET",
       }),
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         try {
@@ -48,15 +48,15 @@ export const api = createApi({
     }),
     addEntry: builder.mutation({
       query: (body) => ({
-        url: "add",
+        url: "entry",
         method: "POST",
         body,
       }),
     }),
     editEntry: builder.mutation({
       query: (body) => ({
-        url: "update",
-        method: "POST",
+        url: "entry",
+        method: "PUT",
         body,
       }),
     }),

@@ -4,7 +4,7 @@
       "_postman_id": "8af72070-be5a-4c78-a61f-d4cdbf2d0bb5",
       "name": "React-Entry",
       "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-      "updatedAt": "2023-12-18T10:43:35.000Z",
+      "updatedAt": "2023-12-19T14:24:22.000Z",
       "uid": "12577500-8af72070-be5a-4c78-a61f-d4cdbf2d0bb5"
     },
     "item": [
@@ -13,14 +13,14 @@
         "id": "cbe7104b-8913-4556-9309-afec65776d74",
         "protocolProfileBehavior": { "disableBodyPruning": true },
         "request": {
-          "method": "POST",
+          "method": "GET",
           "header": [],
           "url": {
-            "raw": "http://localhost:3000/api/entry/sectors",
+            "raw": "http://localhost:3000/api/v1/sector",
             "protocol": "http",
             "host": ["localhost"],
             "port": "3000",
-            "path": ["api", "entry", "sectors"]
+            "path": ["api", "v1", "sector"]
           }
         },
         "response": [
@@ -79,11 +79,11 @@
             "options": { "raw": { "language": "json" } }
           },
           "url": {
-            "raw": "http://localhost:3000/api/entry/add",
+            "raw": "http://localhost:3000/api/v1/entry",
             "protocol": "http",
             "host": ["localhost"],
             "port": "3000",
-            "path": ["api", "entry", "add"]
+            "path": ["api", "v1", "entry"]
           }
         },
         "response": [
@@ -139,7 +139,7 @@
         "id": "3270fc34-064b-4bff-892e-58803349204a",
         "protocolProfileBehavior": { "disableBodyPruning": true },
         "request": {
-          "method": "POST",
+          "method": "GET",
           "header": [],
           "body": {
             "mode": "raw",
@@ -147,11 +147,11 @@
             "options": { "raw": { "language": "json" } }
           },
           "url": {
-            "raw": "http://localhost:3000/api/entry/get",
+            "raw": "http://localhost:3000/api/v1/entry",
             "protocol": "http",
             "host": ["localhost"],
             "port": "3000",
-            "path": ["api", "entry", "get"]
+            "path": ["api", "v1", "entry"]
           }
         },
         "response": [
@@ -207,19 +207,19 @@
         "id": "0d15e342-e735-47a7-b138-358750d062f6",
         "protocolProfileBehavior": { "disableBodyPruning": true },
         "request": {
-          "method": "POST",
+          "method": "PUT",
           "header": [],
           "body": {
             "mode": "raw",
-            "raw": "{\n    \"entryid\" : \"191e1d8c-1443-48c4-af13-a3dad13ca679\",\n    \"name\": \"Luffytaro\",\n    \"sectors\": [\n        51,\n        2,\n        113,\n        112\n    ],\n    \"agreetoterms\": true\n}",
+            "raw": "{\n    \"entryid\" : \"203670e9-4933-46f6-8643-e3b9aa9f2aeb\",\n    \"name\": \"Luffytaro\",\n    \"sectors\": [\n        51,\n        2,\n        113,\n        112\n    ],\n    \"agreetoterms\": true\n}",
             "options": { "raw": { "language": "json" } }
           },
           "url": {
-            "raw": "http://localhost:3000/api/entry/update",
+            "raw": "http://localhost:3000/api/v1/entry",
             "protocol": "http",
             "host": ["localhost"],
             "port": "3000",
-            "path": ["api", "entry", "update"]
+            "path": ["api", "v1", "entry"]
           }
         },
         "response": [
@@ -269,6 +269,96 @@
           }
         ],
         "uid": "12577500-0d15e342-e735-47a7-b138-358750d062f6"
+      },
+      {
+        "name": "delete entry",
+        "id": "8ee456db-8538-46a6-94e3-5bf1ad5dfe6e",
+        "protocolProfileBehavior": { "disableBodyPruning": true },
+        "request": {
+          "method": "DELETE",
+          "header": [],
+          "body": {
+            "mode": "raw",
+            "raw": "",
+            "options": { "raw": { "language": "json" } }
+          },
+          "url": {
+            "raw": "http://localhost:3000/api/v1/entry/203670e9-4933-46f6-8643-e3b9aa9f2aeb",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "3000",
+            "path": [
+              "api",
+              "v1",
+              "entry",
+              "203670e9-4933-46f6-8643-e3b9aa9f2aeb"
+            ]
+          }
+        },
+        "response": [
+          {
+            "id": "997003c8-f752-4fb4-b8e6-9c24c5457270",
+            "name": "New Request",
+            "originalRequest": {
+              "method": "DELETE",
+              "header": [],
+              "body": {
+                "mode": "raw",
+                "raw": "",
+                "options": { "raw": { "language": "json" } }
+              },
+              "url": {
+                "raw": "http://localhost:3000/api/entry/203670e9-4933-46f6-8643-e3b9aa9f2aeb",
+                "protocol": "http",
+                "host": ["localhost"],
+                "port": "3000",
+                "path": ["api", "entry", "203670e9-4933-46f6-8643-e3b9aa9f2aeb"]
+              }
+            },
+            "status": "OK",
+            "code": 200,
+            "_postman_previewlanguage": "json",
+            "header": [
+              { "key": "X-Powered-By", "value": "Express" },
+              { "key": "Access-Control-Allow-Origin", "value": "*" },
+              {
+                "key": "Content-Type",
+                "value": "application/json; charset=utf-8"
+              },
+              { "key": "Content-Length", "value": "64" },
+              {
+                "key": "ETag",
+                "value": "W/\"40-MQsGoCr79r/FRR2uUHyVeVS7IIs\""
+              },
+              { "key": "Date", "value": "Tue, 19 Dec 2023 14:10:02 GMT" },
+              { "key": "Connection", "value": "keep-alive" },
+              { "key": "Keep-Alive", "value": "timeout=5" }
+            ],
+            "cookie": [],
+            "responseTime": null,
+            "body": "{\n    \"returncode\": \"200\",\n    \"message\": \"Deleted successfully.\",\n    \"data\": []\n}",
+            "uid": "12577500-997003c8-f752-4fb4-b8e6-9c24c5457270"
+          }
+        ],
+        "uid": "12577500-8ee456db-8538-46a6-94e3-5bf1ad5dfe6e"
+      },
+      {
+        "name": "delete all entry",
+        "id": "20aeaa95-e272-4bfd-8f11-e9677b83342f",
+        "protocolProfileBehavior": { "disableBodyPruning": true },
+        "request": {
+          "method": "DELETE",
+          "header": [],
+          "url": {
+            "raw": "http://localhost:3000/api/v1/entry",
+            "protocol": "http",
+            "host": ["localhost"],
+            "port": "3000",
+            "path": ["api", "v1", "entry"]
+          }
+        },
+        "response": [],
+        "uid": "12577500-20aeaa95-e272-4bfd-8f11-e9677b83342f"
       }
     ]
   }
